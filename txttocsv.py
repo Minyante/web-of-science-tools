@@ -13,8 +13,8 @@ def load_obj(name):
 def mergeTextIntoCSV(dir):
     dic = load_obj('abreviationdict')
 
-    txtfiles = glob.glob(dir + '\*.txt')
-    with open(dir + '\mergedfiles.csv', 'w', newline='', encoding='utf8') as csvfile:
+    txtfiles = glob.glob(dir + '/*.txt')
+    with open(dir + '/mergedfiles.csv', 'w', newline='', encoding='utf8') as csvfile:
         header = list(dic.values())
         header.append('Firm Name')
         writer = csv.DictWriter(csvfile, fieldnames=header)

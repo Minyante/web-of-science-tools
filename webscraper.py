@@ -81,15 +81,15 @@ def getDataForCompany(company, download_dir):
                     "//button[@class='mat-focus-indicator cdx-but-md mat-stroked-button mat-button-base mat-primary cdk-focused cdk-mouse-focused']").click()
 
             time.sleep(1)
-            if (os.path.isfile(download_dir + '\savedrecs.txt')):
+            if (os.path.isfile(download_dir + '/savedrecs.txt')):
                 if(c == 1):
                     print('File exists, renaming file: ' + company + ' file ' + str(markfrom) + ' to ' + str(markto))
                 else:
                     print('\nFile exists, renaming file: ' + company + ' file ' + str(markfrom) + ' to ' + str(markto))
 
                 try:
-                    os.rename(download_dir + '\savedrecs.txt',
-                              download_dir + '\\'+ company + ' ' + str(markfrom) + '-' + str(markto) + '.txt')
+                    os.rename(download_dir + '/savedrecs.txt',
+                              download_dir + '//'+ company + ' ' + str(markfrom) + '-' + str(markto) + '.txt')
                 except FileExistsError:
                     print('Error: The file: ' + company + ' ' + str(markfrom) + '-' + str(markto) + '.txt' + ' already exists')
                     raise SystemExit
@@ -121,7 +121,7 @@ def load_obj(name):
 dir = input("Please Enter Main Directory: ")
 
 try:
-    companys = getCSVCompanyContent(dir + '\\firmnames.xlsx')
+    companys = getCSVCompanyContent(dir + '/firmnames.xlsx')
 except FileNotFoundError:
     print('Error: Firm Name file does not exist')
     raise SystemExit
@@ -135,7 +135,7 @@ chrome_options.add_argument("--start-maximized")
 chrome_options.add_argument("--incognito")
 
 try:
-    driver = webdriver.Chrome(dir + '\chromedriver.exe', options=chrome_options)
+    driver = webdriver.Chrome(dir + '/chromedriver.exe', options=chrome_options)
 except WebDriverException:
     print('Error: Chrome Driver does not exist')
     raise SystemExit
