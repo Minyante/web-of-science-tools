@@ -18,7 +18,7 @@ python txttocsv.py
 
 ## usage
 
-when launching the webscraper.py script, you will be prompted to enter the main directory. this directory must include the chrome web driver (see download above) and a file named "firmnames.xlsx" which must contain a column header "Firm Name"
+when launching the webscraper.py script, you will be prompted to enter the main directory. this directory must include the chromedriver.exe (see download above) and a file named "firmnames.xlsx" which must contain a column header "Firm Name"
 
 ## known issues
 
