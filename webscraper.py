@@ -131,6 +131,8 @@ chrome_options = webdriver.ChromeOptions()
 
 chrome_options.add_experimental_option("prefs", {"download.default_directory":  dir})
 chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
+chrome_options.add_argument("--start-maximized")
+chrome_options.add_argument("--incognito")
 
 try:
     driver = webdriver.Chrome(dir + '\chromedriver.exe', options=chrome_options)

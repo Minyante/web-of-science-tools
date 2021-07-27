@@ -6,7 +6,7 @@ txttocsv.py converts multiple text files in the web of science from text format 
 
 ## installation
 
-this web scraper tool relies on selenium libraries in order to simulate chrome, selenium relies on chrome web driver which can be installed [here](https://chromedriver.chromium.org/downloads). this program was tested on ChromeDriver 92.0.4515.43 but will most likely work for other versions
+this web scraper tool relies on selenium libraries in order to simulate chrome, selenium relies on chrome web driver which can be installed [here](https://chromedriver.chromium.org/downloads). this program was tested on ChromeDriver 92.0.4515.43 but will most likely work for other versions. your current chrome version and the downloaded chrome driver version MUST be the same.
 
 ```bash
 pip install -r requirements.txt
@@ -20,7 +20,11 @@ python txttocsv.py
 
 when launching the webscraper.py script, you will be prompted to enter the main directory. this directory must include the chrome web driver (see download above) and a file named "firmnames.xlsx" which must contain a column header "Firm Name"
 
-issues may arise when resizing, minimizing, or switching between windows when in use 
+## known issues
+
+element not found exceptions may arise when resizing, minimizing, or switching between windows when in use 
+
+this script may not work if the display resolution is too low as web of science renders a different webpage when the display resolution hits a certain threshold
 
 ## license
 [MIT](https://choosealicense.com/licenses/mit/)
