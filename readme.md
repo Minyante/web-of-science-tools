@@ -23,6 +23,8 @@ python numberofconferences.py
 ## usage
 
 when launching the webscraper.py script, you will be prompted to enter the main directory. this directory must include the chromedriver.exe (see download above) and a file named "firmnames.xlsx" which must contain a column header "Firm Name"
+  
+do not interact with the automated chrome browser when running, make sure to enter credentials through the terminal 
 
 when launching the numberofconferences.py, you will be prompted to enter the main directory. this directory must include the chromedriver.exe (see download above) and a file named "conferencenames.csv" which must contain a column header "Conference Title"
 
