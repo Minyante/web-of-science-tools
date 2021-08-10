@@ -13,10 +13,9 @@ from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import WebDriverException
 
-PATH = 'C:\Program Files (x86)\chromedriver.exe'
+
 main_link = 'http://apps.webofknowledge.com.proxy2.library.illinois.edu/WOS_GeneralSearch_input.do?product=WOS&search_mode=GeneralSearch&SID=8FmeEkA8f3uKTYDYfhK&preferencesSaved='
 
-download_dir = r'C:\Users\maxso\Downloads\Test\\'
 
 def login(username, password):
     driver.find_element_by_id('j_username').clear()
@@ -147,25 +146,26 @@ pswd = getpass.getpass(prompt='Input Net ID Password: ')
 
 login(user, pswd)
 
-if(check_exists_link_text("Advanced Search")):
-    driver.find_element_by_link_text("Advanced Search").click()
-    print("Login Successful")
-else:
-    print("Error: Login Error, please retry")
-    raise SystemExit
-if(check_exists_by_xpath("//button[@id='pendo-close-guide-8fdced48']")):
-    driver.find_element_by_xpath("//button[@id='pendo-close-guide-8fdced48']").click()
+while(True):
+    if (check_exists_by_xpath("//div[@class='alert alert-danger']")):
+        print("Error: Login Error")
+        driver.quit()
+        raise SystemExit
+    if (check_exists_by_xpath("//button[@id='pendo-close-guide-8fdced48']")):
+        driver.find_element_by_xpath("//button[@id='pendo-close-guide-8fdced48']").click()
+        if (check_exists_link_text("Advanced Search")):
+            driver.find_element_by_link_text("Advanced Search").click()
+            break
 
+time.sleep(2)
 driver.find_element_by_xpath("//button[@data-ta='add-timespan-row']").click()
 driver.find_element_by_xpath("//input[@data-ta='search-timespan-start-input']").send_keys('2011-01-01')
 driver.find_element_by_xpath("//input[@data-ta='search-timespan-end-input']").send_keys('2021-07-11')
 driver.implicitly_wait(10)
 
-
 for company in companys:
     if(not getDataForCompany(company, dir) == False):
         driver.back()
-
 
 driver.quit()
 
