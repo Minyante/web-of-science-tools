@@ -75,9 +75,9 @@ def getDataForCompany(company, download_dir):
         c = 1
         while os.path.exists(download_dir):
 
-            if(c % 10 == 0 and not c == 0):
-                driver.find_element_by_xpath(
-                    "//button[@class='mat-focus-indicator cdx-but-md mat-stroked-button mat-button-base mat-primary cdk-focused cdk-mouse-focused']").click()
+ #           if(c % 10 == 0 and not c == 0):
+ #               driver.find_element_by_xpath(
+ #                   "//button[@class='mat-focus-indicator cdx-but-md mat-stroked-button mat-button-base mat-primary cdk-focused cdk-mouse-focused']").click()
 
             time.sleep(1)
             if (os.path.isfile(download_dir + '/savedrecs.txt')):

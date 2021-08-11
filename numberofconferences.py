@@ -44,7 +44,7 @@ def gen(conference):
             continue
 
 def get_conference_names(CSVLocation):
-    df = pd.read_csv(CSVLocation + '\conferencenames.csv')
+    df = pd.read_csv(CSVLocation + '/conferencenames.csv')
     rawconferences = df['Conference Title'].tolist()
     conferences = []
     conferencenames = {}
@@ -62,7 +62,7 @@ def get_conference_names(CSVLocation):
     return(conferences)
 
 def getDataForConference(conferences, download_dir):
-    with open(dir + '\\numberofconferences.csv', 'w', newline='', encoding='utf8') as csvfile:
+    with open(dir + '/numberofconferences.csv', 'w', newline='', encoding='utf8') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=['Conference Title', 'Number of Papers Published'])
         writer.writeheader()
         for conference in conferences:
@@ -104,7 +104,7 @@ chrome_options.add_argument("--incognito")
 chrome_options.add_argument("--start-maximized")
 
 try:
-    driver = webdriver.Chrome(dir + '\chromedriver.exe', options=chrome_options)
+    driver = webdriver.Chrome(dir + '/chromedriver.exe', options=chrome_options)
 except WebDriverException:
     print('Error: Chrome Driver does not exist')
     raise SystemExit
