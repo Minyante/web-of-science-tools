@@ -51,6 +51,7 @@ def getDataForCompany(company, download_dir):
         return False
     if(check_exists_by_xpath("//button[@id='pendo-close-guide-dc656865']")):
         driver.find_element_by_xpath("//button[@id='pendo-close-guide-dc656865']").click()
+    driver.implicitly_wait(10)
     maxresults = int(driver.find_element_by_xpath("//span[@class='brand-blue']").text.replace(',', ''))
     markfrom = 1
     while (markfrom <= maxresults):
