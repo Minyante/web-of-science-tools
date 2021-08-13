@@ -4,7 +4,7 @@ webscraper.py scrapes the web of science database for the details on the researc
 
 txttocsv.py converts multiple text files in the web of science from text format (<tag> <description>) into a row-column formate and consolidates them into one large CSV file named "mergedfiles.csv"
 
-numberofconferences.py finds the number of conferences for a each conference in the file "conferencenames.csv" and stores it in a file called "numberofconferences.csv"
+numberofconferences.py finds the number of conferences for a each conference in the file "rawconferencenames.csv" and stores it in a file called "numberofpapersperconferences.csv"
 
 ## installation
 

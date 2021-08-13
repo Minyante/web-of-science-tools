@@ -44,7 +44,7 @@ def gen(conference):
             continue
 
 def get_conference_names(CSVLocation):
-    df = pd.read_csv(CSVLocation + '/conferencenames.csv')
+    df = pd.read_csv(CSVLocation + '/rawconferencenames.csv')
     rawconferences = df['Conference Title'].tolist()
     conferences = []
     conferencenames = {}
@@ -56,17 +56,18 @@ def get_conference_names(CSVLocation):
         conference = conference.split('(')[0].strip()
         if conference.lower() in conferencenames:
             continue
-        conferencenames[conference.lower()] = None
+        conferencenames[conference.lower()] = rawconferencetitle
         conferences.append(conference)
 
-    return(conferences)
+    return(conferences, conferencenames)
 
-def getDataForConference(conferences, download_dir):
-    with open(dir + '/numberofconferences.csv', 'w', newline='', encoding='utf8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=['Conference Title', 'Number of Papers Published'])
+def getDataForConference(conferences, rawconferencemap, download_dir):
+    with open(dir + '/numberofpapersperconferences.csv', 'w', newline='', encoding='utf8') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=['Raw Conference Title','Conference Title', 'Number of Papers Published'])
         writer.writeheader()
         for conference in conferences:
             row = {}
+            row['Raw Conference Title'] = rawconferencemap[conference.lower()]
             driver.find_element_by_id('advancedSearchInputArea').clear()
             driver.find_element_by_id('advancedSearchInputArea').send_keys('CF=(' + conference + '*) AND FPY=2020')
             driver.find_element_by_xpath("//button[@data-ta='run-search']").click()
@@ -91,7 +92,7 @@ def getDataForConference(conferences, download_dir):
 dir = input("Please Enter Main Directory: ")
 
 try:
-    conferences = get_conference_names(dir)
+    conferences, rawconferencemap = get_conference_names(dir)
 except FileNotFoundError:
     print('Error: Conference Name file does not exist')
     raise SystemExit
@@ -130,6 +131,6 @@ while(True):
 
 time.sleep(2)
 
-getDataForConference(conferences, dir)
+getDataForConference(conferences, rawconferencemap, dir)
 
 driver.quit()
