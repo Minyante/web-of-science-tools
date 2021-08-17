@@ -78,6 +78,8 @@ def getDataForConference(conferences, download_dir):
 
             driver.find_element_by_id('advancedSearchInputArea').clear()
             driver.find_element_by_id('advancedSearchInputArea').send_keys('CF=(' + conference[0] + '*) AND FPY=2020')
+            if (check_exists_by_xpath("//button[@id='pendo-close-guide-8fdced48']")):
+                driver.find_element_by_xpath("//button[@id='pendo-close-guide-8fdced48']").click()
             driver.find_element_by_xpath("//button[@data-ta='run-search']").click()
 
             if (check_exists_by_xpath("//div[@class='search-error error-code light-red-bg ng-star-inserted']")):
