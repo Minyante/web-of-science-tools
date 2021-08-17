@@ -47,52 +47,62 @@ def get_conference_names(CSVLocation):
     df = pd.read_csv(CSVLocation + '/rawconferencenames.csv')
     rawconferences = df['Conference Title'].tolist()
     conferences = []
-    conferencenames = {}
+    x = []
+    mergedconferences = []
     for rawconferencetitle in rawconferences:
-        if (isinstance(rawconferencetitle, float)): continue
+        if (isinstance(rawconferencetitle, float)):
+            continue
         conference = rawconferencetitle.split(' ')
         g = gen(conference)
         conference = ' '.join(g)
         conference = conference.split('(')[0].strip()
-        if conference.lower() in conferencenames:
-            continue
-        conferencenames[conference.lower()] = rawconferencetitle
         conferences.append(conference)
+        x.append(rawconferencetitle)
 
-    return(conferences, conferencenames)
+    mergedconferences =tuple(zip(conferences, x))
+    return(mergedconferences)
 
-def getDataForConference(conferences, rawconferencemap, download_dir):
+def getDataForConference(conferences, download_dir):
     with open(dir + '/numberofpapersperconferences.csv', 'w', newline='', encoding='utf8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=['Raw Conference Title','Conference Title', 'Number of Papers Published'])
+        writer = csv.DictWriter(csvfile, fieldnames=['Raw Conference Title', 'Conference Title', 'Number of Papers Published'])
         writer.writeheader()
+        searchedconferences = {}
         for conference in conferences:
             row = {}
-            row['Raw Conference Title'] = rawconferencemap[conference.lower()]
+            row['Raw Conference Title'] = conference[1]
+            if (conference[0].lower in searchedconferences):
+                row['Number of Papers Published'] = searchedconferences[conference[0].lower]
+                row['Conference Title'] = conference[0]
+                print('Writing row ' + str(row) + ' to CSV file')
+                continue
+
             driver.find_element_by_id('advancedSearchInputArea').clear()
-            driver.find_element_by_id('advancedSearchInputArea').send_keys('CF=(' + conference + '*) AND FPY=2020')
+            driver.find_element_by_id('advancedSearchInputArea').send_keys('CF=(' + conference[0] + '*) AND FPY=2020')
             driver.find_element_by_xpath("//button[@data-ta='run-search']").click()
+
             if (check_exists_by_xpath("//div[@class='search-error error-code light-red-bg ng-star-inserted']")):
                 row['Number of Papers Published'] = 0
-                row['Conference Title'] = conference
+                row['Conference Title'] = conference[0]
                 writer.writerow(row)
+                searchedconferences[conference[0].lower()] = 0
                 print('Writing row ' + str(row) + ' to CSV file')
                 continue
             if (check_exists_by_xpath("//button[@id='pendo-close-guide-dc656865']")):
                 driver.find_element_by_xpath("//button[@id='pendo-close-guide-dc656865']").click()
-            driver.implicitly_wait(10)
-            maxresults = int(driver.find_element_by_xpath("//span[@class='brand-blue']").text.replace(',', ''))
-
-
+            driver.implicitly_wait(1)
+            maxresults = (driver.find_element_by_xpath("//div[@data-ta-search-info-count]")).get_attribute("data-ta-search-info-count")
             row['Number of Papers Published'] = maxresults
-            row['Conference Title'] = conference
+            row['Conference Title'] = conference[0]
             writer.writerow(row)
+            searchedconferences[conference[0].lower()] = maxresults
             print('Writing row ' + str(row) + ' to CSV file')
+            driver.implicitly_wait(1)
             driver.back()
 
 dir = input("Please Enter Main Directory: ")
 
 try:
-    conferences, rawconferencemap = get_conference_names(dir)
+    conferences = get_conference_names(dir)
 except FileNotFoundError:
     print('Error: Conference Name file does not exist')
     raise SystemExit
@@ -131,6 +141,6 @@ while(True):
 
 time.sleep(2)
 
-getDataForConference(conferences, rawconferencemap, dir)
+getDataForConference(conferences, dir)
 
 driver.quit()
