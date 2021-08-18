@@ -35,7 +35,9 @@ def mergeTextIntoCSV(dir):
                     if abrev in dic.keys():
                         row[dic[abrev]] = row.get(dic[abrev], '') + content
                         prevAbr = abrev
-                    if abrev == '  ':
+                    if abrev == '  ' and (prevAbr == 'AU' or prevAbr == 'AF'):
+                        row[dic[prevAbr]] = row.get(dic[prevAbr], '') + '; ' + content
+                    elif abrev == '  ':
                         row[dic[prevAbr]] = row.get(dic[prevAbr], '') + ' ' + content
                 print('Done converting and merging ' + file.split('\\')[-1] + ' into CSV')
 
