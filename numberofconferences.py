@@ -3,6 +3,7 @@ import re
 import csv
 import time
 import getpass
+from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -67,17 +68,19 @@ def getDataForConference(conferences, download_dir):
         writer = csv.DictWriter(csvfile, fieldnames=['Raw Conference Title', 'Conference Title', 'Number of Papers Published'])
         writer.writeheader()
         searchedconferences = {}
+
         for conference in conferences:
             row = {}
             row['Raw Conference Title'] = conference[1]
+            
             if (conference[0].lower in searchedconferences):
                 row['Number of Papers Published'] = searchedconferences[conference[0].lower]
                 row['Conference Title'] = conference[0]
                 print('Writing row ' + str(row) + ' to CSV file')
                 continue
-
             driver.find_element_by_id('advancedSearchInputArea').clear()
             driver.find_element_by_id('advancedSearchInputArea').send_keys('CF=(' + conference[0] + '*) AND FPY=2020')
+            
             if (check_exists_by_xpath("//button[@id='pendo-close-guide-8fdced48']")):
                 driver.find_element_by_xpath("//button[@id='pendo-close-guide-8fdced48']").click()
             driver.find_element_by_xpath("//button[@data-ta='run-search']").click()
@@ -91,8 +94,12 @@ def getDataForConference(conferences, download_dir):
                 continue
             if (check_exists_by_xpath("//button[@id='pendo-close-guide-dc656865']")):
                 driver.find_element_by_xpath("//button[@id='pendo-close-guide-dc656865']").click()
-            driver.implicitly_wait(1)
-            maxresults = (driver.find_element_by_xpath("//div[@data-ta-search-info-count]")).get_attribute("data-ta-search-info-count")
+            driver.implicitly_wait(10)
+            source = driver.page_source
+            soup = BeautifulSoup(source, 'html.parser')
+            print(soup.find('span', {'class' : "brand-blue"}).text)
+            maxresults = (soup.find('span', {'class' : "brand-blue"}).text)
+            soup.decompose
             row['Number of Papers Published'] = maxresults
             row['Conference Title'] = conference[0]
             writer.writerow(row)
